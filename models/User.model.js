@@ -23,16 +23,17 @@ const userSchema = new Schema(
       type: String,
       require: true,
     },
-    adress: [
-      {
-        street: "String",
-        number: "Number",
-        district: "String",
-        zipCode: "number", // colocar algo para validar automaticamente
-        city: "String",
-        state: "String",
-      },
-    ],
+    addresses: { type: String },
+    // [
+    //   {
+    //     street: "String",
+    //     number: "Number",
+    //     district: "String",
+    //     zipCode: "number", // colocar algo para validar automaticamente
+    //     city: "String",
+    //     state: "String",
+    //   },
+    // ],
     birthDate: "Date", // ??????
     profileImg: {
       type: "String",

@@ -24,7 +24,7 @@ const userSchema = new Schema(
       type: String,
       require: true,
     },
-    adress: [
+    addresses: [
       {
         street: "String",
         number: "Number",
@@ -48,6 +48,7 @@ const userSchema = new Schema(
       type: String,
       required: [true, "Password is required."],
     },
+    services: [],
   },
   {
     // this second object adds extra properties: `createdAt` and `updatedAt`
