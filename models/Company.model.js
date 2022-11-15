@@ -2,7 +2,7 @@
 
 const { Schema, model } = require("mongoose");
 
-const userSchema = new Schema(
+const companySchema = new Schema(
   {
     name: {
       type: String,
@@ -25,14 +25,15 @@ const userSchema = new Schema(
       require: true,
     },
     addresses: [
-      {
-        street: "String",
-        number: "Number",
-        district: "String",
-        zipCode: "number", // colocar algo para validar automaticamente
-        city: "String",
-        state: "String",
-      },
+      String,
+      // {
+      //   street: "String",
+      //   number: "Number",
+      //   district: "String",
+      //   zipCode: "number", // colocar algo para validar automaticamente
+      //   city: "String",
+      //   state: "String",
+      // },
     ],
     category: [],
     subcategory: [],
@@ -49,6 +50,8 @@ const userSchema = new Schema(
       required: [true, "Password is required."],
     },
     services: [],
+    description: String,
+    offers: [],
   },
   {
     // this second object adds extra properties: `createdAt` and `updatedAt`
@@ -56,4 +59,4 @@ const userSchema = new Schema(
   }
 );
 
-module.exports = model("User", userSchema);
+module.exports = model("Company", companySchema);

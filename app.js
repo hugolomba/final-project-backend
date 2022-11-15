@@ -12,7 +12,8 @@ require("./db");
 require("./configs")(app);
 
 // rotas
-app.use("/auth", require("./routes/auth.routes"));
+app.use("/user/auth", require("./routes/user.auth.routes"));
+app.use("/company/auth", require("./routes/company.auth.routes"));
 
 // teste de rota de visualização
 app.use("/ver", require("./routes/routes.js"));
