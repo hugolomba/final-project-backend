@@ -39,6 +39,25 @@ router.get("/companies/:username", (req, res, next) => {
   });
 });
 
+// ROTAS DE UPDATE
+
+// cadastra serviço
+router.post("/companies/:username/editservices", (req, res, next) => {
+  const { username } = req.params;
+  const { newServices } = req.body;
+
+  Company.findOneAndUpdate(
+    username,
+    { $push: { services: newServices } },
+    { new: true }
+  )
+    .then((updatedCompany) => {
+      console.log(updatedCompany);
+      res.json(updatedCompany);
+    })
+    .catch((error) => next(error));
+});
+
 //
 
 module.exports = router;
