@@ -16,7 +16,7 @@ app.use("/user/auth", require("./routes/user.auth.routes"));
 app.use("/company/auth", require("./routes/company.auth.routes"));
 
 // teste de rota de visualização
-app.use("/ver", require("./routes/routes.js"));
+app.use("/", require("./routes/routes.js"));
 
 // erros
 require("./error-handling")(app); // importamos e executamos a função já executando ela.
