@@ -42,7 +42,7 @@ router.get("/companies/:username", (req, res, next) => {
 // ROTAS DE UPDATE
 
 // cadastra serviço
-router.post("/companies/:username/editservices", (req, res, next) => {
+router.post("/companies/editservices/:username", (req, res, next) => {
   const { username } = req.params;
   const { newServices } = req.body;
 
@@ -57,6 +57,97 @@ router.post("/companies/:username/editservices", (req, res, next) => {
     })
     .catch((error) => next(error));
 });
+
+// cadastra oferta
+router.post("/companies/editoffers/:username", (req, res, next) => {
+  const { username } = req.params;
+  const { newOffers } = req.body;
+
+  Company.findOneAndUpdate(
+    username,
+    { $push: { offers: newOffers } },
+    { new: true }
+  )
+    .then((updatedCompany) => {
+      console.log(updatedCompany);
+      res.json(updatedCompany);
+    })
+    .catch((error) => next(error));
+});
+
+// edita perfil usuário
+router.post("/users/edit/:usernameUrl", (req, res, next) => {
+  const { usernameUrl } = req.params;
+  console.log("user URL: ", usernameUrl);
+  const {
+    name,
+    username,
+    email,
+    phone,
+    adresses,
+    birthDate,
+    profileImg,
+    password,
+  } = req.body;
+
+  User.findOneAndUpdate(
+    { username: usernameUrl },
+    { name, username, email, phone, adresses, birthDate, profileImg, password },
+    { new: true }
+  )
+    .then((updatedUser) => {
+      console.log(updatedUser);
+      res.json(updatedUser);
+    })
+    .catch((error) => next(error));
+});
+
+// edita perfil empresa
+
+router.post("/companies/edit/:usernameurl", (res, req, next) => {
+  const { usernameUrl } = req.params;
+  console.log(req.params);
+  const {
+    name,
+    username,
+    email,
+    phone,
+    addresses,
+    category,
+    subcategory,
+    profileImg,
+    coverImg,
+    password,
+    services,
+    description,
+    offers,
+  } = req.body;
+
+  Company.findOneAndUpdate(
+    { username: usernameUrl },
+    {
+      name,
+      username,
+      email,
+      phone,
+      addresses,
+      profileImg,
+      coverImg,
+      password,
+      description,
+    },
+    { new: true }
+  )
+    .then((updatedCompany) => {
+      console.log(updatedCompany);
+      res.json(updatedCompany);
+    })
+    .catch((error) => next(error));
+});
+
+// deleta serviço
+
+// deleta oferta
 
 //
 
