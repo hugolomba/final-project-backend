@@ -3,6 +3,8 @@ const router = require("express").Router();
 const User = require("../models/User.model");
 const Company = require("../models/Company.model");
 
+const { isAuthenticated } = require("../middlewares/jwt.middleware");
+
 // ROTAS DE VISUALIZAÇÃO
 
 // todos os usuários
@@ -76,9 +78,9 @@ router.post("/companies/editoffers/:username", (req, res, next) => {
 });
 
 // edita perfil usuário
-router.post("/users/edit/:usernameUrl", (req, res, next) => {
-  const { usernameUrl } = req.params;
-  console.log("user URL: ", usernameUrl);
+router.put("/users/edit", isAuthenticated, (req, res, next) => {
+  const userId = req.payload._id;
+
   const {
     name,
     username,
@@ -87,12 +89,12 @@ router.post("/users/edit/:usernameUrl", (req, res, next) => {
     adresses,
     birthDate,
     profileImg,
-    password,
+    // password,
   } = req.body;
 
   User.findOneAndUpdate(
-    { username: usernameUrl },
-    { name, username, email, phone, adresses, birthDate, profileImg, password },
+    { _id: userId },
+    { name, username, email, phone, adresses, birthDate, profileImg },
     { new: true }
   )
     .then((updatedUser) => {
@@ -104,9 +106,9 @@ router.post("/users/edit/:usernameUrl", (req, res, next) => {
 
 // edita perfil empresa
 
-router.post("/companies/edit/:usernameurl", (res, req, next) => {
-  const { usernameUrl } = req.params;
-  console.log(req.params);
+router.put("/companies/edit", isAuthenticated, (req, res, next) => {
+  const companyId = req.payload._id;
+
   const {
     name,
     username,
@@ -117,14 +119,14 @@ router.post("/companies/edit/:usernameurl", (res, req, next) => {
     subcategory,
     profileImg,
     coverImg,
-    password,
+    // password,
     services,
     description,
     offers,
   } = req.body;
 
   Company.findOneAndUpdate(
-    { username: usernameUrl },
+    { _id: companyId },
     {
       name,
       username,
@@ -133,7 +135,7 @@ router.post("/companies/edit/:usernameurl", (res, req, next) => {
       addresses,
       profileImg,
       coverImg,
-      password,
+      // password,
       description,
     },
     { new: true }
