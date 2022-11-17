@@ -11,6 +11,9 @@ const userSchema = new Schema(
       type: String,
       required: [true, "Username is required"],
       unique: true,
+      minLength: 4,
+      lowercase: true,
+      trim: true,
     },
     email: {
       type: String,
@@ -37,7 +40,7 @@ const userSchema = new Schema(
     birthDate: "Date", // ??????
     profileImg: {
       type: "String",
-      default: "",
+      default: "../img/default-profile.png",
     }, //cloudnary
     password: {
       type: String,
