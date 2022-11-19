@@ -119,10 +119,38 @@ router.post("/login", (req, res, next) => {
 
       if (passwordCorret) {
         // desestruturar password object pra omitir password
-        const { _id, username } = foundCompany;
+        const {
+          _id,
+          name,
+          username,
+          email,
+          phone,
+          addresses,
+          category,
+          subcategory,
+          profileImg,
+          coverImg,
+          services,
+          description,
+          offers,
+        } = foundCompany;
 
         // criar um objeto que vai ser definido como payload do token
-        const payload = { _id, username };
+        const payload = {
+          _id,
+          name,
+          username,
+          email,
+          phone,
+          addresses,
+          category,
+          subcategory,
+          profileImg,
+          coverImg,
+          services,
+          description,
+          offers,
+        };
 
         // criar e assinar o token
         const authToken = jwt.sign(payload, process.env.JWT_SECRET, {
@@ -132,6 +160,7 @@ router.post("/login", (req, res, next) => {
 
         // enviar o token como resposta
         res.status(200).json({ authToken: authToken });
+        console.log("Token de Empresa Criado");
       } else {
         res
           .status(401)

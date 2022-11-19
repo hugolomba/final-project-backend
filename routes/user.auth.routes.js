@@ -141,7 +141,7 @@ router.post("/login", (req, res, next) => {
 
         // enviar o token como resposta
         res.status(200).json({ authToken: authToken });
-        console.log("Token Criado!");
+        console.log("Token de Usuário Criado!");
       } else {
         res
           .status(401)
