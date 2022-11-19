@@ -24,7 +24,7 @@ const userSchema = new Schema(
     },
     phone: {
       type: String,
-      require: true,
+      // require: true,
     },
     addresses: { type: String },
     // [
@@ -40,12 +40,14 @@ const userSchema = new Schema(
     birthDate: "Date", // ??????
     profileImg: {
       type: "String",
-      default: "../img/default-profile.png",
+      default:
+        "https://raw.githubusercontent.com/hugolomba/final-project-backend/main/img/default-profile.png",
     }, //cloudnary
     password: {
       type: String,
       required: [true, "Password is required."],
     },
+    favorites: [],
   },
   {
     // this second object adds extra properties: `createdAt` and `updatedAt`

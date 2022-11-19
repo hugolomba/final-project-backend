@@ -15,7 +15,7 @@ module.exports = (app) => {
   // app.use(cors()); OU app.use(cors({ origin: '*' });
   app.use(
     cors({
-      origin: [FRONTEND_URL],
+      origin: "*",
     })
   );
 

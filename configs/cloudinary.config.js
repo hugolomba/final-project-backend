@@ -13,6 +13,8 @@ const storage = new CloudinaryStorage({
   params: {
     allowed_formats: ["jpg", "png"], // tipos de arquivos que vamos permitir
     folder: "final-project", // nome da pasta que será criada no cloudinary
+    overwrite: true,
+    // public_id: "profile-image",
   },
 });
 

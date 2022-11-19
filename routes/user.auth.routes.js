@@ -4,9 +4,9 @@ const jwt = require("jsonwebtoken");
 const router = require("express").Router();
 const { isAuthenticated } = require("../middlewares/jwt.middleware");
 
-// CLOUDNARY
+// CLOUDNARY;
 // ********* require fileUploader in order to use it *********
-// const fileUploader = require("../config/cloudinary.config");
+const fileUploader = require("../configs/cloudinary.config");
 
 const User = require("../models/User.model");
 
@@ -21,60 +21,68 @@ router.get("/cadastro", (req, res, next) => {
   res.send("Exibe a página de cadastro"); // teste
 });
 
-router.post("/cadastro", (req, res, next) => {
-  const {
-    name,
-    username,
-    email,
-    phone,
-    addresses,
-    bithDate,
-    profileImg,
-    password,
-  } = req.body;
+router.post(
+  "/cadastro",
+  fileUploader.single("profileImg"),
+  (req, res, next) => {
+    const {
+      name,
+      username,
+      email,
+      phone,
+      addresses,
+      bithDate,
+      profileImg,
+      password,
+    } = req.body;
 
-  // 1 verificar se recebeu as informações necessárias, caso não, gerar erro.
-  if (username === "" || password === "") {
-    // throw new Error("Informações Obrigatórias");
-    res.status(400).json({ message: "Username e Password são obrigatórios" });
-    return;
-  }
+    console.log("payload: ", req.payload);
+    console.log("arquivo: ", req.file);
 
-  //2 verificar se nome de usuário já existe e caso já existir, gerar erro.
-
-  User.findOne({ username }).then((foundUser) => {
-    if (foundUser) {
-      res.status(400).json({ message: "User already exists." });
+    // 1 verificar se recebeu as informações necessárias, caso não, gerar erro.
+    if (username === "" || password === "") {
+      // throw new Error("Informações Obrigatórias");
+      res.status(400).json({ message: "Username e Password são obrigatórios" });
       return;
     }
-  });
 
-  // bcrypt
-  bcrypt
-    .genSalt(saltRounds)
-    .then((salt) => bcrypt.hashSync(password, salt))
-    .then((hashedPassword) => {
-      // console.log(`Password hash: ${hashedPassword}`);
-      // res.json(req.body);
-      return User.create({
-        name,
-        username,
-        email,
-        phone,
-        addresses,
-        bithDate,
-        profileImg,
-        password: hashedPassword,
-      });
-    })
-    .then((createdUser) => {
-      // desestruturar novo objeto para omitir password
-      const { name, username, email, phone } = createdUser;
-      console.log(`Usuário Criado: , ${name}(${username})`);
-      res.status(201).json({ name: name, user: username });
-    })
-    .catch((error) => next(error));
-});
+    //2 verificar se nome de usuário já existe e caso já existir, gerar erro.
+
+    User.findOne({ username }).then((foundUser) => {
+      if (foundUser) {
+        res.status(400).json({ message: "User already exists." });
+        return;
+      }
+    });
+
+    // bcrypt
+    bcrypt
+      .genSalt(saltRounds)
+      .then((salt) => bcrypt.hashSync(password, salt))
+      .then((hashedPassword) => {
+        // console.log(`Password hash: ${hashedPassword}`);
+        // res.json(req.body);
+        // console.log(req);
+        return User.create({
+          name,
+          username,
+          email,
+          phone,
+          addresses,
+          bithDate,
+          profileImg: req.file.path,
+          password: hashedPassword,
+        });
+      })
+      .then((createdUser) => {
+        // desestruturar novo objeto para omitir password
+        const { name, username, email, phone } = createdUser;
+        console.log(`Usuário Criado: , ${name}(${username})`);
+        res.status(201).json({ name: name, user: username });
+      })
+      .catch((error) => next(error));
+  }
+);
 
 // ROTA DE LOGIN
 
@@ -102,10 +110,28 @@ router.post("/login", (req, res, next) => {
 
       if (passwordCorret) {
         // desestruturar password object pra omitir password
-        const { _id, username } = foundUser;
+        const {
+          _id,
+          name,
+          username,
+          email,
+          phone,
+          addresses,
+          bithDate,
+          profileImg,
+        } = foundUser;
 
         // criar um objeto que vai ser definido como payload do token
-        const payload = { _id, username };
+        const payload = {
+          _id,
+          name,
+          username,
+          email,
+          phone,
+          addresses,
+          bithDate,
+          profileImg,
+        };
 
         // criar e assinar o token
         const authToken = jwt.sign(payload, process.env.JWT_SECRET, {
@@ -115,6 +141,7 @@ router.post("/login", (req, res, next) => {
 
         // enviar o token como resposta
         res.status(200).json({ authToken: authToken });
+        console.log("Token Criado!");
       } else {
         res
           .status(401)

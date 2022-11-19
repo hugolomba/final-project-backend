@@ -46,7 +46,8 @@ const companySchema = new Schema(
     }, //cloudnary, // ??????
     profileImg: {
       type: "String",
-      default: "../img/default-profile.png",
+      default:
+        "https://raw.githubusercontent.com/hugolomba/final-project-backend/main/img/default-profile.png",
     }, //cloudnary
     password: {
       type: String,
