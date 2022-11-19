@@ -13,7 +13,13 @@ module.exports = (app) => {
   // configurando CORS para aceitar apenas requisições de um lugar.
   // para deixar aberto à qualquer domínio basta usar: app.use(cors());
   // app.use(cors()); OU app.use(cors({ origin: '*' });
-  app.use(cors());
+  app.use(
+    cors({
+      origin: "*",
+      credentials: true, //access-control-allow-credentials:true
+      optionSuccessStatus: 200,
+    })
+  );
 
   // o logger faz console.logs automáticos, com o método, caminho, status e tempo da resposta.
   app.use(logger("dev"));
