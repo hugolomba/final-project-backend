@@ -70,7 +70,7 @@ router.post(
           phone,
           addresses,
           bithDate,
-          profileImg: req.file.path ? req.file.path : "",
+          profileImg: req.file && req.file.path,
           password: hashedPassword,
         });
       })
