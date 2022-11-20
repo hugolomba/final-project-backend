@@ -121,6 +121,7 @@ router.post("/login", (req, res, next) => {
           addresses,
           bithDate,
           profileImg,
+          type,
         } = foundUser;
 
         // criar um objeto que vai ser definido como payload do token
@@ -133,6 +134,7 @@ router.post("/login", (req, res, next) => {
           addresses,
           bithDate,
           profileImg,
+          type,
         };
 
         // criar e assinar o token

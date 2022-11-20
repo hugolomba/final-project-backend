@@ -135,6 +135,7 @@ router.post("/login", (req, res, next) => {
           services,
           description,
           offers,
+          type,
         } = foundCompany;
 
         // criar um objeto que vai ser definido como payload do token
@@ -152,6 +153,7 @@ router.post("/login", (req, res, next) => {
           services,
           description,
           offers,
+          type,
         };
 
         // criar e assinar o token
