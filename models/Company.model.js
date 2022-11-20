@@ -56,6 +56,7 @@ const companySchema = new Schema(
     services: [],
     description: String,
     offers: [],
+    type: { type: "String", default: "company" },
   },
   {
     // this second object adds extra properties: `createdAt` and `updatedAt`
