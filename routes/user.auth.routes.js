@@ -36,8 +36,8 @@ router.post(
       password,
     } = req.body;
 
-    console.log("payload: ", req.payload);
-    console.log("arquivo: ", req.file);
+    // console.log("payload: ", req.payload);
+    // console.log("arquivo: ", req.file);
 
     // 1 verificar se recebeu as informações necessárias, caso não, gerar erro.
     if (username === "" || password === "") {
@@ -70,7 +70,7 @@ router.post(
           phone,
           addresses,
           bithDate,
-          profileImg: req.file.path,
+          profileImg: req.file.path ? req.file.path : "",
           password: hashedPassword,
         });
       })
