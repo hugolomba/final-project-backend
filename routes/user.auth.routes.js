@@ -34,6 +34,7 @@ router.post(
       bithDate,
       profileImg,
       password,
+      type,
     } = req.body;
 
     // console.log("payload: ", req.payload);
@@ -72,6 +73,7 @@ router.post(
           bithDate,
           profileImg: req.file && req.file.path,
           password: hashedPassword,
+          type,
         });
       })
       .then((createdUser) => {
