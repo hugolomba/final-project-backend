@@ -72,7 +72,7 @@ router.post(
           addresses,
           category,
           subcategory,
-          profileImg: req.file.path,
+          profileImg: req.file && req.file.path,
           coverImg,
           password: hashedPassword,
           services,
