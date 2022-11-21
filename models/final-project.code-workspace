@@ -1,11 +1,14 @@
 {
   "folders": [
-	{
-		"path": ".."
-	},
-	{
-		"path": "../../frontend"
-	}
-],
+    {
+      "path": ".."
+    },
+    {
+      "path": "../../frontend"
+    },
+    {
+      "path": "../../../../Module 2/Randomizer/randomizer"
+    }
+  ],
   "settings": {}
 }
