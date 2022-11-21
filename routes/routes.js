@@ -41,6 +41,24 @@ router.get("/companies/:username", (req, res, next) => {
   });
 });
 
+// Busca empresa por categoria
+
+router.get("/companies/category/:category", (req, res, next) => {
+  const { category } = req.params;
+  Company.find({ category: category }).then((foundCompany) => {
+    // const [_id, name, username] = allUsersFromDB;
+    res.json(foundCompany);
+  });
+});
+
+// router.get("/companies/category/", (req, res, next) => {
+//   const { category } = req.query;
+//   Company.find({ category: category }).then((foundCompany) => {
+//     // const [_id, name, username] = allUsersFromDB;
+//     res.json(foundCompany);
+//   });
+// });
+
 // ROTAS DE UPDATE
 
 // cadastra serviço
