@@ -56,6 +56,7 @@ const companySchema = new Schema(
     services: [],
     description: String,
     offers: [],
+    keywords: [],
     type: { type: "String", default: "company" },
   },
   {

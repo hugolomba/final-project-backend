@@ -40,6 +40,7 @@ router.post(
       description,
       offers,
       type,
+      keywords,
     } = req.body;
 
     // 1 verificar se recebeu as informações necessárias, caso não, gerar erro.
@@ -80,6 +81,7 @@ router.post(
           description,
           offers,
           type,
+          // keywords: [category, subcategory],
         });
       })
       .then((createdCompany) => {
@@ -136,6 +138,7 @@ router.post("/login", (req, res, next) => {
           description,
           offers,
           type,
+          // keywords,
         } = foundCompany;
 
         // criar um objeto que vai ser definido como payload do token
@@ -154,6 +157,7 @@ router.post("/login", (req, res, next) => {
           description,
           offers,
           type,
+          // keywords,
         };
 
         // criar e assinar o token

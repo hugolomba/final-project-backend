@@ -62,13 +62,12 @@ router.get("/companies/category/:category", (req, res, next) => {
 // ROTAS DE UPDATE
 
 // cadastra serviço
-router.post("/companies/editservices/:username", (req, res, next) => {
-  const { username } = req.params;
-  const { newServices } = req.body;
+router.put("/companies/editservices/", isAuthenticated, (req, res, next) => {
+  const userId = req.payload._id;
 
-  Company.findOneAndUpdate(
-    username,
-    { $push: { services: newServices } },
+  Company.findByIdAndUpdate(
+    userId,
+    { $push: { services: req.body } },
     { new: true }
   )
     .then((updatedCompany) => {
@@ -79,25 +78,34 @@ router.post("/companies/editservices/:username", (req, res, next) => {
 });
 
 // cadastra oferta
-router.post("/companies/editoffers/:username", (req, res, next) => {
-  const { username } = req.params;
+router.put("/companies/editoffers/", isAuthenticated, (req, res, next) => {
+  const userId = req.payload._id;
   const { newOffers } = req.body;
 
-  Company.findOneAndUpdate(
-    username,
-    { $push: { offers: newOffers } },
+  console.log("userId ", userId);
+  console.log("req body: ", req.body);
+
+  Company.findByIdAndUpdate(
+    userId,
+    { $push: { offers: req.body } },
     { new: true }
   )
+
     .then((updatedCompany) => {
       console.log(updatedCompany);
       res.json(updatedCompany);
     })
-    .catch((error) => next(error));
+    .catch((error) => {
+      console.log(error);
+      next(error);
+    });
 });
 
 // edita perfil usuário
 router.put("/users/edit", isAuthenticated, (req, res, next) => {
   const userId = req.payload._id;
+
+  console.log("logged user id: ", userId);
 
   const {
     name,
@@ -105,14 +113,14 @@ router.put("/users/edit", isAuthenticated, (req, res, next) => {
     email,
     phone,
     adresses,
-    birthDate,
+    // birthDate,
     profileImg,
     // password,
   } = req.body;
 
   User.findOneAndUpdate(
     { _id: userId },
-    { name, username, email, phone, adresses, birthDate, profileImg },
+    { name, username, email, phone, adresses, profileImg },
     { new: true }
   )
     .then((updatedUser) => {

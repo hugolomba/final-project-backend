@@ -37,7 +37,7 @@ const userSchema = new Schema(
     //     state: "String",
     //   },
     // ],
-    birthDate: "Date", // ??????
+    // birthDate: "Date", // ??????
     profileImg: {
       type: "String",
       default:
