@@ -40,10 +40,12 @@ router.get("/companies", (req, res, next) => {
 // busca empresa pelo nome de usuário
 router.get("/companies/:username", (req, res, next) => {
   const { username } = req.params;
-  Company.find({ username: username }).then((foundCompany) => {
-    // const [_id, name, username] = allUsersFromDB;
-    res.json(foundCompany);
-  });
+  Company.find({ username: username })
+    .populate("offers")
+    .then((foundCompany) => {
+      console.log("found unique company: ", foundCompany);
+      res.json(foundCompany);
+    });
 });
 
 // Busca empresa por categoria
