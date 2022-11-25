@@ -81,6 +81,8 @@ router.post(
         const { name, username, email, phone } = createdUser;
         console.log(`Usuário Criado: , ${name}(${username})`);
         res.status(201).json({ name: name, user: username });
+
+        console.log("req body backend (SIGN UP): ", req.body);
       })
       .catch((error) => next(error));
   }
