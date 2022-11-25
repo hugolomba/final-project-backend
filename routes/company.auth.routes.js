@@ -79,7 +79,7 @@ router.post(
           password: hashedPassword,
           services,
           description,
-          offers,
+          // offers,
           type,
           // keywords: [category, subcategory],
         });

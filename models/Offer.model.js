@@ -13,12 +13,13 @@ const offerSchema = new Schema(
       trim: true,
     },
     expiration: {
-      type: Date,
+      type: String,
     },
     offerImg: {
       type: String,
       // require: true,
     },
+    company: String,
   },
   {
     // this second object adds extra properties: `createdAt` and `updatedAt`

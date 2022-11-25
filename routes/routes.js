@@ -2,6 +2,7 @@ const router = require("express").Router();
 
 const User = require("../models/User.model");
 const Company = require("../models/Company.model");
+const Offer = require("../models/Offer.model");
 
 const { isAuthenticated } = require("../middlewares/jwt.middleware");
 const fileUploader = require("../configs/cloudinary.config");
@@ -27,10 +28,13 @@ router.get("/users/:username", (req, res, next) => {
 
 //todas as empresas
 router.get("/companies", (req, res, next) => {
-  Company.find().then((allCompaniesFromDB) => {
-    // const [_id, name, username] = allUsersFromDB;
-    res.json(allCompaniesFromDB);
-  });
+  Company.find()
+    .populate("offers")
+    .then((allCompaniesFromDB) => {
+      console.log("allCompaniesFromDB: ", allCompaniesFromDB);
+
+      res.json(allCompaniesFromDB);
+    });
 });
 
 // busca empresa pelo nome de usuário
@@ -71,6 +75,7 @@ router.put("/companies/editservices/", isAuthenticated, (req, res, next) => {
     { $push: { services: req.body } },
     { new: true }
   )
+
     .then((updatedCompany) => {
       console.log(updatedCompany);
       res.json(updatedCompany);
@@ -78,29 +83,61 @@ router.put("/companies/editservices/", isAuthenticated, (req, res, next) => {
     .catch((error) => next(error));
 });
 
-// cadastra oferta
-router.put("/companies/editoffers/", isAuthenticated, (req, res, next) => {
-  const userId = req.payload._id;
-  const { newOffers } = req.body;
+// // cadastra oferta
+// router.put("/companies/editoffers/", isAuthenticated, (req, res, next) => {
+//   const userId = req.payload._id;
 
-  console.log("userId ", userId);
-  console.log("req body: ", req.body);
+//   console.log("userId ", userId);
+//   console.log("req body: ", req.body);
 
-  Company.findByIdAndUpdate(
-    userId,
-    { $push: { offers: req.body } },
-    { new: true }
-  )
+//   Company.findByIdAndUpdate(
+//     userId,
+//     { $push: { offers: req.body } },
+//     { new: true }
+//   )
 
-    .then((updatedCompany) => {
-      console.log(updatedCompany);
-      res.json(updatedCompany);
+//     .then((updatedCompany) => {
+//       console.log(updatedCompany);
+//       res.json(updatedCompany);
+//     })
+//     .catch((error) => {
+//       console.log(error);
+//       next(error);
+//     });
+// });
+
+// cadastra oferta (modelo)
+router.post(
+  "/companies/addoffer",
+  isAuthenticated,
+  fileUploader.single("profileImg"),
+  (req, res, next) => {
+    const userId = req.payload._id;
+    const { offerName, offerPrice, expiration, offerImg } = req.body;
+
+    Offer.create({
+      offerName,
+      offerPrice,
+      expiration,
+      offerImg: req.file && req.file.path,
+      company: userId,
     })
-    .catch((error) => {
-      console.log(error);
-      next(error);
-    });
-});
+      .then((createdOffer) => {
+        console.log(`Oferta criada: ${offerName}`);
+        res.status(201).json(createdOffer);
+
+        return Company.findByIdAndUpdate(userId, {
+          $push: { offers: createdOffer._id },
+        }).populate("offers");
+      })
+
+      .then((updatedUser) => {
+        console.log("updatedUser: ", updatedUser);
+        res.status(200).json(updatedUser);
+      })
+      .catch((error) => console.log(error));
+  }
+);
 
 // edita perfil usuário
 router.put(
