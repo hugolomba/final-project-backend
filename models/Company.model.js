@@ -55,7 +55,7 @@ const companySchema = new Schema(
     },
     services: [],
     description: String,
-    offers: [],
+    offers: [{ type: Schema.Types.ObjectId, ref: "Offer" }],
     keywords: [],
     type: { type: "String", default: "company" },
   },
