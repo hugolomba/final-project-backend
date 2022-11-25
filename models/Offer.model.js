@@ -10,7 +10,7 @@ const offerSchema = new Schema(
     offerPrice: {
       type: Number,
       required: [true, "Offer Price is required"],
-      trim: true,
+      // trim: true,
     },
     expiration: {
       type: String,
