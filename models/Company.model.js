@@ -53,11 +53,13 @@ const companySchema = new Schema(
       type: String,
       required: [true, "Password is required."],
     },
-    services: [],
+    services: [{ type: Schema.Types.ObjectId, ref: "Service" }],
     description: String,
     offers: [{ type: Schema.Types.ObjectId, ref: "Offer" }],
     keywords: [],
     type: { type: "String", default: "company" },
+    instagram: String,
+    whatsapp: String,
   },
   {
     // this second object adds extra properties: `createdAt` and `updatedAt`

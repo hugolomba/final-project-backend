@@ -41,6 +41,7 @@ router.post(
       offers,
       type,
       keywords,
+      instagram,
     } = req.body;
 
     // 1 verificar se recebeu as informações necessárias, caso não, gerar erro.
@@ -79,7 +80,7 @@ router.post(
           password: hashedPassword,
           services,
           description,
-          // offers,
+          instagram,
           type,
           // keywords: [category, subcategory],
         });
@@ -138,6 +139,7 @@ router.post("/login", (req, res, next) => {
           description,
           offers,
           type,
+          instagram,
           // keywords,
         } = foundCompany;
 
@@ -157,6 +159,7 @@ router.post("/login", (req, res, next) => {
           description,
           offers,
           type,
+          instagram,
           // keywords,
         };
 
