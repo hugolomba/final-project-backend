@@ -75,7 +75,7 @@ router.get("/companies/category/:category", (req, res, next) => {
 router.post(
   "/companies/service",
   isAuthenticated,
-  fileUploader.single("serviceOffer"),
+  fileUploader.single("serviceImg"),
   (req, res, next) => {
     const userId = req.payload._id;
     const { serviceName, servicePrice, serviceImg } = req.body;
