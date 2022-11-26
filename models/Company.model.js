@@ -59,7 +59,7 @@ const companySchema = new Schema(
     keywords: [],
     type: { type: "String", default: "company" },
     instagram: String,
-    whatsapp: { type: "String", trim: true },
+    whatsapp: { type: String, trim: true },
   },
   {
     // this second object adds extra properties: `createdAt` and `updatedAt`
