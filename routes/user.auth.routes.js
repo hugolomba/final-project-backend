@@ -105,7 +105,9 @@ router.post("/login", (req, res, next) => {
     .then((foundUser) => {
       if (!foundUser) {
         // se não existir, mande uma repsosta de erro
-        res.status(401).json({ message: "Usuário ou senha não encontrados" });
+        res
+          .status(401)
+          .json({ message: ">>>>>Usuário ou senha não encontrados" });
         return;
       }
 
@@ -124,6 +126,8 @@ router.post("/login", (req, res, next) => {
           // birthDate,
           profileImg,
           type,
+          offers,
+          services,
         } = foundUser;
 
         // criar um objeto que vai ser definido como payload do token
@@ -137,6 +141,8 @@ router.post("/login", (req, res, next) => {
           // birthDate,
           profileImg,
           type,
+          offers,
+          services,
         };
 
         // criar e assinar o token
@@ -162,6 +168,58 @@ router.post("/login", (req, res, next) => {
 router.get("/verify", isAuthenticated, (req, res, next) => {
   try {
     res.status(200).json({ authenticatedUser: req.payload });
+  } catch (error) {
+    next(error);
+  }
+});
+
+router.get("/update-token", isAuthenticated, async (req, res, next) => {
+  const userId = req.payload._id;
+
+  try {
+    const foundUser = await User.findById(userId);
+    if (!foundUser) {
+      // se não existir, mande uma repsosta de erro
+      res.status(401).json({ message: "Usuário ou senha não encontrados" });
+      return;
+    }
+
+    const {
+      _id,
+      name,
+      username,
+      email,
+      phone,
+      addresses,
+      // birthDate,
+      profileImg,
+      type,
+      offers,
+      services,
+    } = foundUser;
+
+    // criar um objeto que vai ser definido como payload do token
+    const payload = {
+      _id,
+      name,
+      username,
+      email,
+      phone,
+      addresses,
+      // birthDate,
+      profileImg,
+      type,
+      offers,
+      services,
+    };
+
+    // criar e assinar o token
+    const authToken = jwt.sign(payload, process.env.JWT_SECRET, {
+      algorithm: "HS256",
+      expiresIn: "6h",
+    });
+
+    res.status(200).json({ authToken, payload });
   } catch (error) {
     next(error);
   }

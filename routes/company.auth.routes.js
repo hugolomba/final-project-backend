@@ -194,4 +194,66 @@ router.get("/verify", isAuthenticated, (req, res, next) => {
   }
 });
 
+router.get("/update-token", isAuthenticated, async (req, res, next) => {
+  const userId = req.payload._id;
+
+  try {
+    const foundCompany = await Company.findById(userId);
+    if (!foundCompany) {
+      // se não existir, mande uma repsosta de erro
+      res.status(401).json({ message: "Usuário ou senha não encontrados" });
+      return;
+    }
+
+    const {
+      _id,
+      name,
+      username,
+      email,
+      phone,
+      addresses,
+      category,
+      subcategory,
+      profileImg,
+      coverImg,
+      services,
+      description,
+      offers,
+      type,
+      instagram,
+      // keywords,
+    } = foundCompany;
+
+    // criar um objeto que vai ser definido como payload do token
+    const payload = {
+      _id,
+      name,
+      username,
+      email,
+      phone,
+      addresses,
+      category,
+      subcategory,
+      profileImg,
+      coverImg,
+      services,
+      description,
+      offers,
+      type,
+      instagram,
+      // keywords,
+    };
+
+    // criar e assinar o token
+    const authToken = jwt.sign(payload, process.env.JWT_SECRET, {
+      algorithm: "HS256",
+      expiresIn: "6h",
+    });
+
+    res.status(200).json({ authToken, payload });
+  } catch (error) {
+    next(error);
+  }
+});
+
 module.exports = router;

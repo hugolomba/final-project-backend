@@ -12,10 +12,12 @@ const fileUploader = require("../configs/cloudinary.config");
 
 // todos os usuários
 router.get("/users", (req, res, next) => {
-  User.find().then((allUsersFromDB) => {
-    // const [_id, name, username] = allUsersFromDB;
-    res.json(allUsersFromDB);
-  });
+  User.find()
+    .populate("offers")
+    .then((allUsersFromDB) => {
+      // const [_id, name, username] = allUsersFromDB;
+      res.json(allUsersFromDB);
+    });
 });
 
 // busca usuário pelo nome de usuário
@@ -31,7 +33,7 @@ router.get("/users/:username", (req, res, next) => {
 router.get("/companies", (req, res, next) => {
   Company.find()
     .populate("offers")
-    .populate("services")
+    // .populate("services")
     .then((allCompaniesFromDB) => {
       // console.log("allCompaniesFromDB: ", allCompaniesFromDB);
 
@@ -44,7 +46,7 @@ router.get("/companies/:username", (req, res, next) => {
   const { username } = req.params;
   Company.find({ username: username })
     .populate("offers")
-    .populate("services")
+    // .populate("services")
     .then((foundCompany) => {
       // console.log("found unique company: ", foundCompany);
       res.json(foundCompany);
@@ -55,10 +57,12 @@ router.get("/companies/:username", (req, res, next) => {
 
 router.get("/companies/category/:category", (req, res, next) => {
   const { category } = req.params;
-  Company.find({ category: category }).then((foundCompany) => {
-    // const [_id, name, username] = allUsersFromDB;
-    res.json(foundCompany);
-  });
+  Company.find({ category: category })
+    .populate("offers")
+    .then((foundCompany) => {
+      // const [_id, name, username] = allUsersFromDB;
+      res.json(foundCompany);
+    });
 });
 
 // router.get("/companies/category/", (req, res, next) => {
@@ -92,7 +96,9 @@ router.post(
 
         return Company.findByIdAndUpdate(userId, {
           $push: { services: createdService._id },
-        }).populate("services");
+        })
+          .populate("services")
+          .populate("offers");
       })
 
       .then((updatedUser) => {
@@ -125,7 +131,9 @@ router.post(
 
         return Company.findByIdAndUpdate(userId, {
           $push: { offers: createdOffer._id },
-        }).populate("offers");
+        })
+          .populate("offers")
+          .populate("services");
       })
 
       .then((updatedUser) => {
@@ -215,6 +223,7 @@ router.put(
       },
       { new: true }
     )
+      .populate("offers")
       .then((updatedCompany) => {
         console.log(updatedCompany);
         res.json(updatedCompany);
@@ -253,7 +262,40 @@ router.delete("/companies", isAuthenticated, (req, res, next) => {
 
 // deleta serviço
 
+router.delete(
+  "/companies/service/:serviceId",
+  isAuthenticated,
+  async (req, res, next) => {
+    const userId = req.payload._id;
+    const { serviceId } = req.params;
+
+    try {
+      await User.findByIdAndUpdate(userId, { $pull: { services: serviceId } });
+      await Service.findByIdAndDelete(serviceId);
+      res.status(204).json();
+    } catch (error) {
+      next(error);
+    }
+  }
+);
+
 // deleta oferta
+router.delete(
+  "/companies/offer/:offerId",
+  isAuthenticated,
+  async (req, res, next) => {
+    const userId = req.payload._id;
+    const { offerId } = req.params;
+
+    try {
+      await User.findByIdAndUpdate(userId, { $pull: { offers: offerId } });
+      await Offer.findByIdAndDelete(offerId);
+      res.status(204).json();
+    } catch (error) {
+      next(error);
+    }
+  }
+);
 
 //
 
