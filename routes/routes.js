@@ -14,6 +14,7 @@ const fileUploader = require("../configs/cloudinary.config");
 router.get("/users", (req, res, next) => {
   User.find()
     .populate("offers")
+    .populate("services")
     .then((allUsersFromDB) => {
       // const [_id, name, username] = allUsersFromDB;
       res.json(allUsersFromDB);
@@ -33,6 +34,7 @@ router.get("/users/:username", (req, res, next) => {
 router.get("/companies", (req, res, next) => {
   Company.find()
     .populate("offers")
+    .populate("services")
     // .populate("services")
     .then((allCompaniesFromDB) => {
       // console.log("allCompaniesFromDB: ", allCompaniesFromDB);
@@ -46,6 +48,7 @@ router.get("/companies/:username", (req, res, next) => {
   const { username } = req.params;
   Company.find({ username: username })
     .populate("offers")
+    .populate("services")
     // .populate("services")
     .then((foundCompany) => {
       // console.log("found unique company: ", foundCompany);
@@ -59,6 +62,7 @@ router.get("/companies/category/:category", (req, res, next) => {
   const { category } = req.params;
   Company.find({ category: category })
     .populate("offers")
+    .populate("services")
     .then((foundCompany) => {
       // const [_id, name, username] = allUsersFromDB;
       res.json(foundCompany);
@@ -224,6 +228,7 @@ router.put(
       { new: true }
     )
       .populate("offers")
+      .populate("services")
       .then((updatedCompany) => {
         console.log(updatedCompany);
         res.json(updatedCompany);
