@@ -42,6 +42,7 @@ router.post(
       type,
       keywords,
       instagram,
+      whatsapp,
     } = req.body;
 
     // 1 verificar se recebeu as informações necessárias, caso não, gerar erro.
@@ -82,6 +83,7 @@ router.post(
           description,
           instagram,
           type,
+          whatsapp,
           // keywords: [category, subcategory],
         });
       })
