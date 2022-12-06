@@ -60,7 +60,11 @@ router.get("/companies/:username", (req, res, next) => {
 
 router.get("/companies/category/:category", (req, res, next) => {
   const { category } = req.params;
-  Company.find({ category: category })
+
+  const capitalized =
+    category[0].toUpperCase() + category.substr(1).toLowerCase();
+
+  Company.find({ category: capitalized })
     .populate("offers")
     .populate("services")
     .then((foundCompany) => {
